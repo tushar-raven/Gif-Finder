@@ -8,22 +8,18 @@ findGif.addEventListener("click", (e) => {
   fetchGIF(query);
 });
 
-function fetchGIF(query) {
-  fetch(
+async function fetchGIF(query) {
+  const response = await fetch(
     `https://api.giphy.com/v1/gifs/translate?api_key=K1dSXa8JwdSxinTMhDhQHiKPeM8nIIaK&s=${query}`,
     { mode: "cors" }
-  )
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (response) {
-      console.log(response.data.images.original.width);
-      console.log(response.data.images.original.height);
-      img.src = response.data.images.original.url;
-      img.style.width = `${response.data.images.original.width}`;
-      img.style.height = `${response.data.images.original.height}`;
-    })
-    .catch(function () {
-      img.src = "error.gif";
-    });
+  );
+
+  try {
+    const catData = await response.json();
+    img.src = catData.data.images.original.url;
+    img.style.width = `${catData.data.images.original.width}`;
+    img.style.height = `${catData.data.images.original.height}`;
+  } catch {
+    img.src = "error.gif";
+  }
 }
